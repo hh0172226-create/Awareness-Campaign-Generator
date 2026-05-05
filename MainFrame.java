@@ -1,84 +1,99 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.awarenessgenerator;
 
-/**
- *
- * @author hassa
- */
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Random;
 
 public class MainFrame extends JFrame {
     private JComboBox<String> companyTypeBox;
     private JTextArea outputArea;
-    private Map<String, String> awarenessData;
+    private Random random = new Random();
 
     public MainFrame() {
-        setTitle("Cybersecurity Awareness Campaign Generator");
-        setSize(600, 500);
+        setTitle("AI Dynamic Security Generator");
+        setSize(750, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(new BorderLayout(10, 10));
+        setLayout(new BorderLayout(15, 15));
 
-        
-        initData();
-
-        // واجهة المستخدم (GUI) 
         JPanel topPanel = new JPanel();
-        topPanel.add(new JLabel("Select Organization Type:"));
+        topPanel.setBackground(new Color(245, 245, 245));
+        topPanel.add(new JLabel("Target Sector:"));
         
         String[] types = {"Hospital", "Bank", "University"};
         companyTypeBox = new JComboBox<>(types);
         topPanel.add(companyTypeBox);
 
-        JButton generateBtn = new JButton("Generate Plan");
+        JButton generateBtn = new JButton("Generate New AI Plan");
         topPanel.add(generateBtn);
 
         outputArea = new JTextArea();
         outputArea.setEditable(false);
-        outputArea.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        outputArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        outputArea.setMargin(new Insets(15, 15, 15, 15));
+        outputArea.setBackground(new Color(30, 30, 30));
+        outputArea.setForeground(new Color(0, 255, 100));
         
         add(topPanel, BorderLayout.NORTH);
         add(new JScrollPane(outputArea), BorderLayout.CENTER);
 
-       
         generateBtn.addActionListener((ActionEvent e) -> {
             String selected = (String) companyTypeBox.getSelectedItem();
-            outputArea.setText(awarenessData.get(selected));
+            outputArea.setText(generateDynamicPlan(selected));
         });
     }
 
-    private void initData() {
-        awarenessData = new HashMap<>();
-        
-        
-        awarenessData.put("Hospital", 
-            "=== CYBERSECURITY PLAN: HOSPITAL ===\n" +
-            "1. Core Threats: Ransomware on patient records, IoT device hijacking.\n" +
-            "2. Phishing Case: Email 'Urgent Patient Lab Results' containing malware.\n" +
-            "3. Risks: Identity theft, loss of life due to equipment failure.\n" +
-            "4. Protection: Data encryption (AES-256), Multi-Factor Authentication (MFA).");
+    private String generateDynamicPlan(String sector) {
+        String[] threats = getThreats(sector);
+        String[] phishing = getPhishing(sector);
+        String[] solutions = getSolutions(sector);
 
+        StringBuilder sb = new StringBuilder();
+        sb.append("🤖 [AI LIVE GENERATION FOR: ").append(sector.toUpperCase()).append("]\n");
+        sb.append("Timestamp: ").append(new java.util.Date()).append("\n");
+        sb.append("--------------------------------------------------\n\n");
         
-        awarenessData.put("Bank", 
-            "=== CYBERSECURITY PLAN: BANK ===\n" +
-            "1. Core Threats: Financial fraud, SQL injection on transaction DB.\n" +
-            "2. Phishing Case: Fake 'Account Suspended' SMS with a malicious link.\n" +
-            "3. Risks: Financial loss, regulatory non-compliance fines.\n" +
-            "4. Protection: Zero Trust Architecture, E2EE for transactions.");
+        sb.append("🔥 CURRENT THREAT LANDSCAPE:\n");
+        sb.append("   - ").append(threats[random.nextInt(threats.length)]).append("\n");
+        sb.append("   - ").append(threats[random.nextInt(threats.length)]).append("\n\n");
 
-        // مثال لقطاع الجامعات
-        awarenessData.put("University", 
-            "=== CYBERSECURITY PLAN: UNIVERSITY ===\n" +
-            "1. Core Threats: Intellectual property theft, DDoS on student portal.\n" +
-            "2. Phishing Case: 'Scholarship Update' email asking for login credentials.\n" +
-            "3. Risks: Reputation damage, compromised research data.\n" +
-            "4. Protection: Network segmentation, regular backup schedule.");
+        sb.append("📧 NEW PHISHING VARIANT DETECTED:\n");
+        sb.append("   - ").append(phishing[random.nextInt(phishing.length)]).append("\n\n");
+
+        sb.append("💡 RECOMMENDED AI DEFENSE:\n");
+        sb.append("   - ").append(solutions[random.nextInt(solutions.length)]).append("\n");
+        sb.append("   - ").append(solutions[random.nextInt(solutions.length)]).append("\n\n");
+        
+        sb.append("--------------------------------------------------\n");
+        sb.append("Click 'Generate' again for a fresh security perspective.");
+
+        return sb.toString();
     }
 
+    private String[] getThreats(String sector) {
+        switch (sector) {
+            case "Hospital": return new String[]{"Ransomware on MRI machines", "EHR Data Leaks", "Legacy System Vulnerabilities", "Insider Privacy Breach", "Bio-Metric Spoofing"};
+            case "Bank": return new String[]{"ATM Jackpotting", "AI-Generated Deepfake Voice Fraud", "SWIFT Network Infiltration", "Mobile Banking Trojan", "SQL Injection on Ledgers"};
+            case "University": return new String[]{"Research IP Exfiltration", "DDoS on Learning Management Systems", "Credential Stuffing on Student Portals", "Ransomware on Admin Servers", "Phishing for Academic Credentials"};
+            default: return new String[]{"General Security Threat", "System Vulnerability"};
+        }
+    }
+
+    private String[] getPhishing(String sector) {
+        switch (sector) {
+            case "Hospital": return new String[]{"Fake 'New Lab Protocol' PDF", "Urgent Patient Transfer Request", "Medical Insurance Verification Scam", "Department Budget Update Notification"};
+            case "Bank": return new String[]{"Suspicious Login Alert SMS", "Updated Terms of Service Link", "Priority Loan Approval Document", "CEO Fraud: Urgent Wire Transfer Request"};
+            case "University": return new String[]{"Scholarship Eligibility Notification", "Library Password Reset Request", "Dean's Invitation to Research Seminar", "Unpaid Tuition Fee Reminder"};
+            default: return new String[]{"Standard Phishing Attempt"};
+        }
+    }
+
+    private String[] getSolutions(String sector) {
+        switch (sector) {
+            case "Hospital": return new String[]{"IoT Network Micro-segmentation", "Real-time AI Vitals Monitoring Security", "Blockchain for Medical Records", "Air-gapped Backups for EHR"};
+            case "Bank": return new String[]{"Behavioral Biometrics Analysis", "Zero-Trust Architecture", "Hardware Security Modules (HSM)", "Multi-signature Transaction Approval"};
+            case "University": return new String[]{"Federated Identity Management", "Regular Penetration Testing of Portals", "VLAN Isolation for Labs", "Cloud-native Security Posture Management"};
+            default: return new String[]{"Standard Security Patching"};
+        }
+    }
 }
